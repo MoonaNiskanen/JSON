@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Digi Cafe</title>
+
+    <link rel="stylesheet" href="tyylit.css">
+</head>
+
+<body>
+
+    <div class="topnav" id="myTopnav">
+        <a href="index.html">Etusivu</a>
+        <a href="digicafe.html">Digi Cafe</a>
+        <a href="palaveri.html">Palaveri</a>
+        <a href="tyopaikat.html">Työpaikat</a>
+    </div>
+
+    <div id="vastaus"></div>
+
+    <script>
+
+fetch('https://raw.githubusercontent.com/MoonaNiskanen/JSON/refs/heads/main/digicafe.json')
+
+.then(function(response) {
+    return response.json();
+})
+
+.then(function(data) {
+    kerro(data);
+})
+
+.catch(function(error) {
+
+    document.getElementById("vastaus").innerHTML =
+    "<p>Tietoa ei pystytä hakemaan</p>";
+
+});
+
+
+
+function kerro(data) {
+
+    var teksti = "";
+
+    // Yritys
+    teksti += "<h1>" + data.yritys + "</h1>";
+
+    // Yhteystiedot
+    teksti += "<h3>Yhteystiedot</h3>";
+
+    teksti += "<p>";
+    teksti += data.yhteystiedot.osoite + "<br>";
+    teksti += data.yhteystiedot.puhelin + "<br>";
+    teksti += data.yhteystiedot.email;
+    teksti += "</p>";
+
+    // Tuotteet
+    teksti += "<h3>Tuotteet</h3>";
+
+    teksti += "<ul>";
+
+    for (var i = 0; i < data.tuotteet.length; i++) {
+        teksti += "<li>" + data.tuotteet[i] + "</li>";
+    }
+
+    teksti += "</ul>";
+
+    // Henkilökunta
+    teksti += "<h3>Henkilökunta</h3>";
+
+    teksti += "<ul>";
+
+    for (var i = 0; i < data.henkilokunta.length; i++) {
+
+        teksti += "<li>";
+        teksti += data.henkilokunta[i].nimi + " - ";
+        teksti += data.henkilokunta[i].titteli;
+        teksti += "</li>";
+    }
+
+    teksti += "</ul>";
+
+    // Tulostetaan sivulle
+    document.getElementById("vastaus").innerHTML = teksti;
+}
+
+</script>
+
+</body>
+</html>

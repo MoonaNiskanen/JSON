@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Etusivu</title>
+
+    <link rel="stylesheet" href="tyylit.css">
+</head>
+
+<body>
+
+    <!-- Navigointi -->
+    <div class="topnav" id="myTopnav">
+        <a href="index.html" class="active">Etusivu</a>
+        <a href="digicafe.html">Digi Cafe</a>
+        <a href="palaveri.html">Palaveri</a>
+        <a href="tyopaikat.html">Työpaikat</a>
+    </div>
+
+    <!-- Tänne tulee JSON-data -->
+    <div id="vastaus"></div>
+
+    <!-- JavaScript tähän -->
+    <script>
+
+    // Muunnetaan JSON-muotoon
+    fetch('https://jaakkola.github.io/json/digitekniikat.json')
+
+    // Muunnetaan JSON-muotoon
+    .then(function (response) {
+        return response.json();
+    })
+
+    // Käsitellään data
+    .then(function (responseJson) {
+        kerro(responseJson);
+    })
+
+    // Virhetilanne
+    .catch(function (error) {
+        document.getElementById("vastaus").innerHTML =
+        "<p>Tietoa ei pystytä hakemaan</p>";
+    });
+
+
+    function kerro(data) {
+
+        var teksti = "";
+
+        // Otsikko
+        teksti += "<h1>" + data.otsikko + "</h1>";
+
+        // Kuvaus
+        teksti += "<p>" + data.kuvaus + "</p>";
+
+        // Kuva
+        teksti += "<p><img src='" + data.kuva + "' alt='kuva'></p>";
+
+        // Opintojakso
+        teksti += "<h3>Opintojakso "
+        + data.opintojakso.nimi + " "
+        + data.opintojakso.tunnus + " "
+        + data.opintojakso.opintopisteet + " op</h3>";
+
+        // Sisältö
+        teksti += "<ul>";
+
+        for (var i = 0; i < data.sisalto.length; i++) {
+            teksti += "<li>" + data.sisalto[i] + "</li>";
+        }
+
+        teksti += "</ul>";
+
+        // Linkit
+        teksti += "<h3>Linkit</h3>";
+
+        teksti += "<ul>";
+
+        for (var i = 0; i < data.tekniikat.length; i++) {
+
+            teksti += "<li>";
+
+            teksti += data.tekniikat[i].aihe + " - ";
+
+            teksti += "<a href='" + data.tekniikat[i].linkki + "' target='_blank'>";
+
+            teksti += data.tekniikat[i].linkki;
+
+            teksti += "</a>";
+
+            teksti += "</li>";
+        }
+
+        teksti += "</ul>";
+
+        // Tulostetaan sivulle
+        document.getElementById("vastaus").innerHTML = teksti;
+    }
+
+    </script>
+
+</body>
+</html>
